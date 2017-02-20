@@ -116,6 +116,30 @@ class ConstantPiecewise(Fitter):
         return "Constant through %i data points: y = %f, error = %f" %  \
                (len(self.data),) + self.coeff + (self.error,)
 
+class ConstantMaxPiecewise(Fitter):
+    """ Constant regression class fits its data with a single average"""
+    minlength = 1
+    cost = 3    # endpoints, coeffs
+    description = "Constants max"
+
+    def __init__(self, data):
+        Fitter.__init__(self, data)
+        self.value = numpy.max(self.data.y)
+        self.calcresiduals()
+        self.liney = self.eval(numpy.array(self.xrange))
+
+    def eval(self, x):
+        rval = x.copy()
+        rval.fill(self.value)
+        return rval
+
+    def plotvals(self):
+        return self.xrange, self.liney
+
+    def __repr__(self):
+        return "Constant through %i data points: y = %f, error = %f" %  \
+               (len(self.data), self.coeff, self.error)
+
 
 class LinearRegression(Fitter):
     """ Linear regression class fits its data with straight line """
@@ -381,6 +405,7 @@ if __name__ == "__main__":
     fronts = []
     fitrange = range(3, 4)
     fittypes = (ConstantPiecewise,
+                ConstantMaxPiecewise,
                 LinearRegression,
                 QuadraticRegression,
                 LineThroughEndPoints,
