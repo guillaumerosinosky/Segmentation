@@ -113,8 +113,8 @@ class ConstantPiecewise(Fitter):
         return self.xrange, self.liney
 
     def __repr__(self):
-        return "Constant through %i data points: y = %f, error = %f" %  \
-               (len(self.data),) + self.coeff + (self.error,)
+        return "Constant through %i data points: error = %f" %  \
+               (len(self.data), self.error)
 
 class ConstantMaxPiecewise(Fitter):
     """ Constant regression class fits its data with a single average"""
@@ -137,8 +137,8 @@ class ConstantMaxPiecewise(Fitter):
         return self.xrange, self.liney
 
     def __repr__(self):
-        return "Constant through %i data points: y = %f, error = %f" %  \
-               (len(self.data), self.coeff, self.error)
+        return "Constant through %i data points: error = %f" %  \
+               (len(self.data), self.error)
 
 
 class LinearRegression(Fitter):
