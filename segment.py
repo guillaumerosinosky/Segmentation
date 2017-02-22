@@ -354,10 +354,11 @@ class BottomUp(SegmentationAlgorithm):
 
         initialerror = fits.error
 
-        if initialerror > self.epsilon:
-            return fits
+        if fitbudget == 0:
+            if initialerror > self.epsilon:
+                return fits
 
-        while len(fits) > 1:
+        while len(fits) > fitbudget:
             # build pairs of fits
             pairs = [self.fitter(fits.fits[i].data + fits.fits[i+1].data) for i in range(len(fits)-1)]
             # find best break
@@ -366,8 +367,9 @@ class BottomUp(SegmentationAlgorithm):
             for i, p in enumerate(pairs):
                 if p.error < pairs[bestbreak].error:
                     bestbreak = i
-            if pairs[bestbreak].error > self.epsilon:
-                break
+            if fitbudget == 0:
+                if pairs[bestbreak].error > self.epsilon:
+                    break
             # merge best break
             fits.fits[bestbreak] = pairs[bestbreak]
             del fits.fits[bestbreak+1]
